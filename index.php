@@ -10,7 +10,7 @@ $conn = new mysqli($host, $user, $password, $db); //mySQL php extension user man
 
 // error test on connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Connection failed, error code: " . $conn->connect_error);
 }
 
 $shortUrl = '';
@@ -29,126 +29,133 @@ $urlMap = getAllUrls();
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>URL Shortener</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                margin: 0;
-                padding: 0;
-            }
+<head>
+    <title>Ethan's URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f9fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-            .main {
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
+        .main {
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-            h1 {
-                margin-top: 0;
-            }
+        h1 {
+            margin-top: 0;
+            color: #2980b9;
+        }
 
-            .urlSection {
-                margin-bottom: 15px;
-            }
+        .urlSection {
+            margin-bottom: 15px;
+        }
 
-            label {
-                display: block;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2980b9;
+        }
 
-            input[type="text"] {
-                width: 100%;
-                padding: 10px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-            .button {
-                display: block;
-                width: 100%;
-                padding: 10px;
-                font-size: 16px;
-                background-color: #4caf50;
-                color: #fff;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #2980b9;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-            .shortened-url {
-                margin-top: 20px;
-            }
+        .shortened-url {
+            margin-top: 20px;
+        }
 
-            .shortened-url p {
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
+        .shortened-url p {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2980b9;
+        }
 
-            .shortened-url a {
-                color: #0645ad;
-                text-decoration: none;
-            }
+        .shortened-url a {
+            color: #0645ad;
+            text-decoration: none;
+        }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-            th, td {
-                padding: 8px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
 
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="main">
-            <h1>URL Shortener</h1>
-            <form method="post" action="">
-                <div class="urlSection">
-                    <label for="url">Enter a URL:</label>
-                    <input type="text" id="url" name="url" placeholder="Enter a URL" required>
-                </div>
-                <input type="submit" name="submit" value="Shorten" class="button">
-            </form>
+        th {
+            background-color: #f2f2f2;
+            color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>Ethan's URL Shortener</h1>
+        <form method="post" action="">
+            <div class="urlSection">
+                <label for="url">Enter a URL:</label>
+                <input type="text" id="url" name="url" placeholder="" required>
+            </div>
+            <input type="submit" name="submit" value="Shorten" class="button">
+        </form>
 
-            <?php if (!empty($shortUrl)): ?>
-                <div class="shortened-url">
-                    <p>Shortened URL:</p>
-                    <a href="<?php echo $shortUrl; ?>" target="_blank"><?php echo $shortUrl; ?></a>
-                </div>
-            <?php endif; ?>
+        <?php if (!empty($shortUrl)): ?>
+            <div class="shortened-url">
+                <p>Shortened URL:</p>
+                <a href="<?php echo $shortUrl; ?>" target="_blank"><?php echo $shortUrl; ?></a>
+            </div>
+        <?php endif; ?>
 
-            <h2>All Shortened URLs:</h2>
-            <table>
-                <thead>
+        <h2>All Shortened URLs:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Shortened URL</th>
+                    <th>Original URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($urlMap as $url): ?>
                     <tr>
-                        <th>Shortened URL</th>
-                        <th>Original URL</th>
+                        <td><a href="<?php echo $url['original_url']; ?>"><?php echo $url['short_url']; ?></a></td>
+                        <td><?php echo $url['original_url']; ?></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($urlMap as $url): ?>
-                        <tr>
-                            <td><a href="<?php echo $url['original_url']; ?>"><?php echo $url['short_url']; ?></a></td>
-                            <td><?php echo $url['original_url']; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </body>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</body>
 </html>
 
 <?php
@@ -170,6 +177,11 @@ function generateShortUrl() {
 function addToMap($shortURL, $originalUrl) {
     global $conn;
 
+    if (!filter_var($originalUrl, FILTER_VALIDATE_URL)) { // checks for invalid URLs
+        header("Location: error.php"); //sends to the error page if invalid
+        exit();
+    }
+    
     $shortURL = $conn->real_escape_string($shortURL);
     $originalUrl = $conn->real_escape_string($originalUrl);
     //adds https:// to URLs missing it
@@ -184,7 +196,7 @@ function addToMap($shortURL, $originalUrl) {
 
 // retrieves URL based on shortURL
 function getShortUrl($shortURL) {
-    $baseUrl = 'http://localhost/urlTest1/';
+    $baseUrl = 'https://shortethan.000webhostapp.com/';
     return $baseUrl . 'redirect.php?sU=' . $shortURL; //sU = shortURL
 }
 

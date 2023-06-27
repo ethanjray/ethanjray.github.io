@@ -45,7 +45,7 @@
         <h1>Error</h1>
         <div class="invText">
             <p>Invalid URL</p>
-            <p>The entered URL does not exist within the database.</p>
+            <p>The entered URL does not exist.</p>
         </div>
         <a href="index.php" class="button">Return</a>
     </div>
